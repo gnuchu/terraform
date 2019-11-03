@@ -16,6 +16,7 @@ resource "digitalocean_droplet" "playground" {
   region = "lon1"
   size = "1gb"
   depends_on = [var.droplet_project]
+  ssh_keys = [digitalocean_ssh_key.default.fingerprint]
 }
 
 resource "digitalocean_project" "terraform" {
@@ -23,4 +24,9 @@ resource "digitalocean_project" "terraform" {
   description = var.project_description
   purpose = var.project_purpose
   environment = var.project_environment
+}
+
+resource "digitalocean_ssh_key" "default" {
+  name = "terraform_id"
+  public_key = file("keys/terraform_id.pub")
 }
