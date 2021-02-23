@@ -1,12 +1,12 @@
 
 provider "aws" {
   profile = "default"
-  region = "eu-west-2"
+  region = var.region
 }
 
 resource "aws_instance" "example" {
-  ami = "ami-0d8e27447ec2c8410"
-  instance_type = "t2.micro"
+  ami = var.amis[var.region]
+  instance_type = var.instance_type
 
   depends_on = ["aws_s3_bucket.example"]
 
@@ -30,4 +30,13 @@ resource "aws_key_pair" "deployer" {
   key_name = "deployer-key"
   public_key = "${file("c:\\users\\jgriffiths\\.ssh\\aws_keypair.pub")}"
 }
+
+output "ami" {
+  value = aws_instance.example.ami
+}
+
+output "public_dns" {
+  value = aws_instance.example.public_dns
+}
+
 
